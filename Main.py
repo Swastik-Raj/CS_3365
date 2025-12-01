@@ -81,7 +81,7 @@ team = TeamManager(
 )
 
 application_summary = """
-Application Summary
+Application Summary of the user_calendar function.
 """
 
 console = Console()
