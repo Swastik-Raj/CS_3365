@@ -81,9 +81,9 @@ team = TeamManager(
 )
 
 application_summary = """
-The proposed system is a lightweight Personal Calendar Event Manager that allows users to store simple date-based reminders.
+The proposed system is a Personal Calendar Event Manager that allows users to store simple date-based reminders.
 Users can input an event by selecting a month and day, while the system handles year assignment automatically.
-Each event consists of a description and a timestamp, which the system structures into an event object.
+Each event consists of a description and a Date, which the system structures into an event object.
 All events are stored in a centralized in-memory list that acts as a basic event repository.
 The system ensures uniform formatting of stored events by converting raw user input into a proper date object.
 Users can enter multiple events during a session, and each event is appended to the event collection.
