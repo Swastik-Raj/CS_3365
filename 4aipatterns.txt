@@ -1,0 +1,7 @@
+The project that was made successfully implemented all four of the agentic AI patterns required of it beyond the functionality it was built for on the application level. With the base calendar application already outline in the previous textual report We will first look at the implementation of tool based agents for calling functions in the code. In the our tool agent uses the user_calendar function. Secondly our coding agent generates the UML use case diagram for the calendar function and then generates the python code to reflect that UML. The reflection agent acts as our observation agent, looking over our UML and code and ensuring no errors. Finally our Manager agent facilitates all the other agents collaborative workflow.
+
+
+Credit: 
+Sunny: Primary calendar program and core Agentic AI workflow program
+Jackson: Bug fixing, code cleanup and certain code adjustments, Report writing
+Jake: Bug fixing, code cleanup and certain code adjustments, Report writing and editing. 
