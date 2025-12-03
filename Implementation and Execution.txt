@@ -1,0 +1,214 @@
+1. Tool Based Agent 
+Implementation: 
+# In-memory event store
+events: list[dict] = []
+
+
+def user_calendar(
+    event_month: int,
+    event_day: int,
+    event_year: int,
+    event_desc: str,
+) -> dict:
+    """
+    Create and store a calendar event.
+    """
+    date = datetime(event_year, event_month, event_day)
+    event = {
+        "description": event_desc,
+        "date": date.isoformat(),  # JSON-friendly
+    }
+    events.append(event)
+    return event
+
+
+tool_agent = AssistantAgent(
+    name="tool_agent",
+    model_client=client,
+    system_message=(
+        "You are a calendar tool agent. "
+        "Use the `user_calendar` tool to create and store events. "
+        "Always provide these arguments explicitly: "
+        "event_month (1-12), event_day (1-31), event_year (e.g., 2025), "
+        "and event_desc (string description). "
+        "Return the tool result to the requesting agent."
+    ),
+    tools=[user_calendar],  # <-- tool-based agent
+)
+Execution:
+---------- TextMessage (tool_agent) ----------
+```json
+{
+  "name": "user_calendar",
+  "parameters": {
+    "event_month": 6,
+    "event_day": 24,
+    "event_year": 2025,
+    "event_desc": "Event description"
+  }
+}
+
+2. Coding Agent
+Implementation: 
+coding_agent = AssistantAgent(
+    name="coding_agent",
+    model_client=client,
+    system_message=(
+        "You generate UML diagrams (use case, class, sequence) in PlantUML "
+        "and generate runnable Python code for sequence diagrams. "
+        "Use clear, syntactically correct PlantUML, and runnable Python."
+    ),
+)
+Execution: 
+---------- TextMessage (coding_agent) ----------
+Here is a revised version of the provided code with several improvements:
+
+**UML Use Case Diagram**
+```plantuml
+@startuml
+usecase "Register Event" {
+  - User
+  ->> System : Create event
+}
+usecase "List Events" {
+  - User
+  <-[Calendar] > System : Display events list
+}
+usecase "Filter Events" {
+  - User
+  <-[Calendar] > System : Filter events by date or description
+}
+usecase "Sort Events" {
+  - User
+  <-[Calendar] > System : Sort events by date or description
+}
+usecase "Export Events" {
+  - User
+  <-[Calendar] > System : Export events to calendar file
+}
+@enduml
+
+3. Multi-Agent Collaboration
+Implementation: # Agents
+manager_agent = AssistantAgent(...)
+
+tool_agent = AssistantAgent(...)
+coding_agent = AssistantAgent(...)
+observer_agent = AssistantAgent(...)
+
+# Graph construction
+builder = DiGraphBuilder()
+builder.add_node(manager_agent).add_node(tool_agent).add_node(coding_agent).add_node(observer_agent)
+
+# Edges = collaboration pattern
+builder.add_edge(manager_agent, coding_agent)   # manager -> coding
+builder.add_edge(coding_agent, observer_agent)  # coding -> observer
+builder.add_edge(manager_agent, tool_agent)     # manager -> tool
+
+graph = builder.build()
+
+flow = GraphFlow(
+    participants=builder.get_participants(),
+    graph=graph,
+)
+Execution: 
+---------- TextMessage (user) ----------
+Here is a software application description: ...
+Produce the following: (UML, JSON, Class Diagram, Sequence, Python, Observer evaluation)
+
+---------- TextMessage (manager_agent) ----------
+Here's the implementation of your requirements:
+(High-level combined answer that includes UML, JSON, code, observer, etc.)
+
+---------- TextMessage (coding_agent) ----------
+Here is a revised version of the provided code with several improvements:
+(UML + JSON + Python code)
+
+---------- TextMessage (tool_agent) ----------
+{
+  "name": "user_calendar",
+  "parameters": {
+    "event_month": 6,
+    "event_day": 24,
+    "event_year": 2025,
+    "event_desc": "Event description"
+  }
+}
+This will create a new event on the user's calendar...
+
+---------- TextMessage (observer_agent) ----------
+I'll evaluate the provided code and provide feedback on issues found.
+(Feedback on UML, class diagram, Python, plus improved versions)
+
+4. Observer and Monitoring
+Implementation: observer_agent = AssistantAgent(
+    name="observer_agent",
+    model_client=client,
+    system_message=(
+        "You are a reflection agent. Evaluate the generated diagrams and code, "
+        "identify problems, and propose improvements. "
+        "Clearly list issues and provide corrected versions when possible."
+    ),
+)
+Execution: 
+---------- TextMessage (observer_agent) ----------
+I'll evaluate the provided code and provide feedback on issues found.
+
+**UML Use Case Diagram**
+
+The UML use case diagram appears to be well-structured and effectively represents the different use cases for a user-calender application. However, there are a few potential improvements:
+* The "Register Event" use case could be more detailed...
+* Consider adding a use case for deleting events from the calendar.
+
+**Use Case Specifications (JSON)**
+
+* The "List Events" use case could benefit from more detailed steps...
+* The "Filter Events" and "Sort Events" use cases might be improved...
+
+**Class Diagram**
+
+* Consider adding a `User` class that inherits from a base `Person` class...
+* The `Event` class could benefit from additional attributes, such as an `id` or `start_time`.
+
+**Python Code Implementing Sequence Diagrams**
+
+* The `register_event.py` file could benefit from additional error handling...
+* Consider adding a separate module for utility functions...
+
+(Then it provides updated code:)
+Here’s an updated version of the `register_event.py` file with improved error handling:
+
+```python
+from datetime import datetime
+
+class Event:
+    def __init__(self, description, date):
+        self.description = description
+        self.date = date
+
+class Calendar:
+    def __init__(self):
+        self.events = []
+
+    def add_event(self, event):
+        self.events.append(event)
+
+    def filter_events(self, description):
+        return [event for event in self.events if description.lower() in event.description.lower()]
+
+    def sort_events(self):
+        return sorted(self.events, key=lambda x: x.date)
+
+class System:
+    def __init__(self):
+        self.calendar = Calendar()
+
+    def create_event(self, user_input):
+        try:
+            date_str, description = user_input
+            date = datetime.strptime(date_str, '%Y-%m-%d')
+            return Event(description, date)
+        except ValueError as e:
+            raise ValueError(f"Invalid date format: {e}")
+        except Exception as e:
+            raise ValueError(f"Error creating event: {e}")
