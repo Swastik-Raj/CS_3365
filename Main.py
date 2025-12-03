@@ -99,7 +99,7 @@ result = team.run(
         f"Here is a software application description:\n\n"
         f"{application_summary}\n\n"
         "Produce the following:\n"
-        "1. UML Use Case Diagram (plantUML)\n"
+        "1. UML Use Case Diagram with 4-5 use cases (plantUML)\n"
         "2. Use Case Specifications (JSON)\n"
         "3. Class Diagram (plantUML)\n"
         "4. Sequence Diagrams (plantUML)\n"
